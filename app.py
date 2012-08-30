@@ -2,6 +2,7 @@ import os
 from flask import Flask
 
 app = Flask(__name__)
+app.configi['DEBUG'] = bool(os.environ.get('DEBUG'))
 
 @app.route('/')
 def index():

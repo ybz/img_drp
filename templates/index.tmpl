@@ -2,6 +2,10 @@
     <head>
         <link href='http://fonts.googleapis.com/css?family=Bitter:400,700|Actor' rel='stylesheet' type='text/css'>
         <style type="text/css">
+            html {
+                background-image : url('{{ background_url }}');
+                background-repeat : repeat;
+            }
             html, body {
                 width : 100%;
                 margin : 0;
@@ -16,6 +20,7 @@
                 font-size : 48px;
                 font-weight : 700;
                 margin : 50px auto 0 auto;
+                text-shadow : 0 2px 2px #fff;
             }
             .subtitle {
                 color : #555;
@@ -23,6 +28,7 @@
                 font-weight : 400;
                 font-size : 22px;
                 margin : 0 auto 0 auto;
+                text-shadow : 0 2px 2px #fff;
             }
             .message {
                 color : #999;
@@ -30,6 +36,7 @@
                 font-weight : 300;
                 font-size : 16px;
                 margin : 30px auto 0 auto;
+                text-shadow : 0 1px 1px #fff;
             }
             .message a {
                 color : #6CC700;

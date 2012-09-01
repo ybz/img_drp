@@ -1,12 +1,12 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
-app.configi['DEBUG'] = bool(os.environ.get('DEBUG'))
+app.config['DEBUG'] = bool(os.environ.get('DEBUG'))
 
 @app.route('/')
 def index():
-    return 'Putzify is currently unavailable'
+    return render_template('index.tmpl')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

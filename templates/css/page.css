@@ -1,6 +1,7 @@
 html {
     background-image : url('{{ 'circles.png' | static }}');
     background-repeat : repeat;
+    font-family : 'Quattrocento Sans', sans-serif;
 }
 html, body {
     width : 100%;

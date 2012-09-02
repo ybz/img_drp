@@ -1,0 +1,27 @@
+body {
+    padding-top : 100px;
+}
+.drop_ground {
+    background-color : #fff;
+    border-color : #ddd;
+    border-radius : 4px;
+    border-style : solid;
+    border-width : 1px;
+    width : 400px;
+    height : 400px;
+    margin : 0 auto;
+    text-align : center;
+}
+.drop_ground .vertical_aligner,
+.drop_ground .content {
+    display : inline-block;
+    vertical-align : middle;
+}
+.drop_ground .vertical_aligner {
+    height : 100%;
+}
+.drop_ground .content {
+    color : #ccc;
+    font-size : 28px;
+    font-family : 'Bitter', serif;
+}

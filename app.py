@@ -10,9 +10,9 @@ app.jinja_env.filters['static'] = lambda name: url_for('static', filename=name)
 def index():
     return render_template('index.tmpl')
 
-@app.route('/drag_test/')
+@app.route('/drop_test/')
 def drop_test():
-    return render_template('drag_test.tmpl')
+    return render_template('drop_test.tmpl')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

@@ -3,10 +3,10 @@ body {
 }
 .drop_ground {
     background-color : #fff;
-    border-color : #ddd;
-    border-radius : 4px;
     border-style : solid;
     border-width : 1px;
+    border-color : #eaeaea;
+    box-shadow : 0 3px 25px rgba(80, 80, 80, 0.05);
     width : 400px;
     height : 400px;
     margin : 0 auto;
@@ -21,7 +21,7 @@ body {
     height : 100%;
 }
 .drop_ground .content {
-    color : #ccc;
-    font-size : 28px;
+    color : #555;
+    font-size : 26px;
     font-family : 'Bitter', serif;
 }

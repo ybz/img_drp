@@ -1,22 +1,16 @@
-<html>
-    <head>
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <link href='http://fonts.googleapis.com/css?family=Bitter:400,700|Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'>
-        <style type="text/css">
-            {% include 'css/index.css' %}
-        </style>
-        <title>Putzify</title>
+{% extends 'page.tmpl' %}
 
-    </head>
-    <body>
-        <div class="title">Putzify</div>
-        <div class="subtitle">Express your inner snob</div>
-        <div class="message">
-            <div>Putzify will be publicly available soon.</div>
-            <div>Meanwhile, you can <a href="mailto:beta@putzify.com">drop us a note</a> and join beta program</div>
-        </div>
-        <div class="footer">
-            <div class="note">Putzify <span>2012</span></div>
-        </div>
-    </body>
-</html>
+{% block head %}
+<style type="text/css">
+    {% include 'css/index.css' %}
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="title">Putzify</div>
+    <div class="subtitle">Express your inner snob</div>
+    <div class="message">
+        <div>Putzify will be publicly available soon.</div>
+        <div>Meanwhile, you can <a href="mailto:beta@putzify.com">drop us a note</a> and join beta program</div>
+    </div>
+{% endblock %}

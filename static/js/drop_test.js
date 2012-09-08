@@ -7,6 +7,24 @@
   }
 
   window.putz.drop = ns = {
+    image_sent: false,
+    event_list: {},
+    events: function(id) {
+      var callbacks, ev;
+      ev = id && ns.event_list[id];
+      if (!ev) {
+        callbacks = $.Callbacks();
+        ev = {
+          publish: callbacks.fire,
+          subscribe: callbacks.add,
+          unsubscribe: callbacks.remove
+        };
+        if (id) {
+          ns.event_list[id] = ev;
+        }
+      }
+      return ev;
+    },
     attachDropHandler: function(dom_el, handler) {
       var el;
       el = $(dom_el);
@@ -21,18 +39,60 @@
         e.preventDefault();
         return handler(e);
       });
+    },
+    dropHandler: function(ev) {
+      var data_transfer, file, file_to_send, files, _i, _len;
+      data_transfer = ev.originalEvent.dataTransfer;
+      files = data_transfer.files;
+      console.log('a file was dropped, data_transfer ', data_transfer, ' files ', files);
+      console.log("x1 you have seemed to drop " + files.length + " files");
+      if (!files) {
+        return;
+      }
+      for (_i = 0, _len = files.length; _i < _len; _i++) {
+        file = files[_i];
+        if (!!file.type.match(/^image/)) {
+          file_to_send = file;
+          break;
+        }
+      }
+      if (!file_to_send) {
+        return;
+      }
+      console.log('got file to send ', file_to_send);
+      return ns.sendImageForDetection(file_to_send);
+    },
+    sendImageForDetection: function(img_file) {
+      var ajax_params, file_data, xhr;
+      console.log('about to send an image for detection');
+      file_data = new FormData();
+      file_data.append('image', img_file);
+      ajax_params = {
+        url: putz.urls.face_detect_post,
+        data: file_data,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function() {
+          return ns.events('face_ajax_returned').publish(arguments);
+        }
+      };
+      console.log('sending file with params: ', ajax_params);
+      xhr = $.ajax(ajax_params);
+      return ns.events('face_ajax_sent').publish();
     }
   };
 
   $(function() {
     var drop_ground;
     drop_ground = $('.drop_ground');
-    return ns.attachDropHandler(drop_ground, function(e) {
-      var data_transfer, files;
-      data_transfer = e.originalEvent.dataTransfer;
-      files = data_transfer.files;
-      console.log('a file was dropped, data_transfer ', data_transfer, ' files ', files);
-      return console.log("you have seemed to drop " + files.length + " files");
+    ns.attachDropHandler(drop_ground, ns.dropHandler);
+    ns.events('face_ajax_returned').subscribe(function() {
+      return console.log('returned from post, arguments ', arguments);
+    });
+    return ns.events('face_ajax_sent').subscribe(function() {
+      drop_ground.off('drop', ns.dropHandler);
+      return drop_ground.children('.content').html('Sending image...');
     });
   });
 

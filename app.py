@@ -1,7 +1,8 @@
 import os
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, jsonify
 from werkzeug import secure_filename
 from tempfile import mkdtemp
+from putzcard.face_detect import find_faces
 
 UPLOAD_FOLDER = os.environ['UPLOAD_FOLDER'] if 'UPLOAD_FOLDER' in os.environ else mkdtemp()
 
@@ -25,8 +26,15 @@ def upload_for_detect():
         print 'inside func'
         file = request.files['image']
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return 'fine image'
+        file_save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename) 
+        file.save(file_save_path)
+        faces = find_faces(file_save_path)
+        if not faces:
+            face = False
+        else:
+            face = {}
+            face.x, face.y, face.height, face.width = faces[0][0]
+        return jsonify(face)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

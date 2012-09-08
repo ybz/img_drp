@@ -74,12 +74,42 @@
         contentType: false,
         type: 'POST',
         success: function() {
-          return ns.events('face_ajax_returned').publish(arguments);
+          return ns.events('face_ajax_returned').publish.apply(ns.events('face_ajax_returned'), arguments);
         }
       };
       console.log('sending file with params: ', ajax_params);
+      ns.face_image = img_file;
       xhr = $.ajax(ajax_params);
       return ns.events('face_ajax_sent').publish();
+    },
+    parseFaceDetectResponse: function() {
+      var face, img_el, img_file, mark, reader, res_data;
+      console.log('returned from post, arguments ', arguments);
+      res_data = arguments[0];
+      console.log(res_data);
+      if (res_data.face) {
+        $('.drop_ground').remove();
+        $('body').prepend("<div class=\"putzcard_wrapper\">\n    <div class=\"putzcard stage\">\n        <div class=\"img_wrapper\">\n            <img src=\"\"/>\n            <div class=\"face_mark\"></div>\n        </div>\n    </div>\n</div>");
+        reader = new FileReader();
+        img_file = ns.face_image;
+        img_el = $('.putzcard img');
+        reader.onload = function() {
+          return img_el.attr('src', reader.result);
+        };
+        reader.readAsDataURL(img_file);
+        console.log('img loaded');
+        face = res_data.face;
+        mark = $('.putzcard .face_mark');
+        return mark.css({
+          display: 'block',
+          left: face.x,
+          top: face.y,
+          width: face.width,
+          height: face.height
+        });
+      } else {
+        return $('.drop_ground .content').html('Sorry, no face detected in image');
+      }
     }
   };
 
@@ -87,9 +117,7 @@
     var drop_ground;
     drop_ground = $('.drop_ground');
     ns.attachDropHandler(drop_ground, ns.dropHandler);
-    ns.events('face_ajax_returned').subscribe(function() {
-      return console.log('returned from post, arguments ', arguments);
-    });
+    ns.events('face_ajax_returned').subscribe(ns.parseFaceDetectResponse);
     return ns.events('face_ajax_sent').subscribe(function() {
       drop_ground.off('drop', ns.dropHandler);
       return drop_ground.children('.content').html('Sending image...');

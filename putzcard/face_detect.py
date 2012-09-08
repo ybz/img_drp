@@ -11,6 +11,6 @@ def find_faces(img_path):
 
     haar_file_path = os.path.join(OPEN_CV_PATH, 'haarcascade_frontalface_default.xml')
     cascade = cv.Load(haar_file_path)
-    faces = cv.HaarDetectObjects(image, cascade, cv.CreateMemStorage(), min_size=(50, 50))
+    faces = cv.HaarDetectObjects(image, cascade, cv.CreateMemStorage(), min_size=(30, 30))
     return faces
 

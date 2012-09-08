@@ -50,19 +50,51 @@ window.putz.drop = ns =
             contentType : false
             type : 'POST'
             success : ->
-                ns.events('face_ajax_returned').publish arguments
+                ns.events('face_ajax_returned').publish.apply ns.events('face_ajax_returned'), arguments
         console.log 'sending file with params: ', ajax_params
+        ns.face_image = img_file
         xhr = $.ajax ajax_params
         ns.events('face_ajax_sent').publish()
+    parseFaceDetectResponse : ->
+        console.log 'returned from post, arguments ', arguments
+        res_data = arguments[0]
+        console.log res_data
+        if res_data.face
+            $('.drop_ground').remove()
+            $('body').prepend("""
+                <div class="putzcard_wrapper">
+                    <div class="putzcard stage">
+                        <div class="img_wrapper">
+                            <img src=""/>
+                            <div class="face_mark"></div>
+                        </div>
+                    </div>
+                </div>
+            """)
+            reader = new FileReader()
+            img_file = ns.face_image
+            img_el = $('.putzcard img')
+            reader.onload = ->
+                img_el.attr 'src', reader.result
+            reader.readAsDataURL(img_file)
+            console.log 'img loaded'
+            face = res_data.face
+            mark = $('.putzcard .face_mark')
+            mark.css
+                display : 'block'
+                left : face.x
+                top : face.y
+                width : face.width
+                height : face.height
+        else
+            $('.drop_ground .content').html 'Sorry, no face detected in image'
 
 
-    
 
 $ ->
     drop_ground = $('.drop_ground')
     ns.attachDropHandler drop_ground, ns.dropHandler
-    ns.events('face_ajax_returned').subscribe ->
-        console.log 'returned from post, arguments ', arguments
+    ns.events('face_ajax_returned').subscribe ns.parseFaceDetectResponse
     ns.events('face_ajax_sent').subscribe ->
         drop_ground.off 'drop', ns.dropHandler
         drop_ground.children('.content').html 'Sending image...'

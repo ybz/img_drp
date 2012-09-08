@@ -33,8 +33,8 @@ def upload_for_detect():
             face = False
         else:
             face = {}
-            face.x, face.y, face.height, face.width = faces[0][0]
-        return jsonify(face)
+            face['x'], face['y'], face['height'], face['width'] = faces[0][0]
+        return jsonify({'face' : face})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

@@ -1,10 +1,13 @@
+import os
+
 from putzcard.bin_load import open_cv_available
 
 def find_faces(img_path, cascade_file_path):
-    print 'find_faces called'
     assert open_cv_available(), 'missing opencv'
-    print 'got opencv'
-    from cv2 import cv as cv
+    OPEN_CV_PATH = os.environ['OPENCV_PATH']
+    os.chdir(OPEN_CV_PATH)
+    import cv2
+    cv = cv2.cv
     image = cv.LoadImage(img_path)
     grayscale = cv.CreateImage((image.width, image.height), 8, 1)
     cv.CvtColor(image, grayscale, cv.CV_BGR2GRAY)

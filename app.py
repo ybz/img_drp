@@ -23,13 +23,15 @@ def drop_test():
 @app.route('/face_upload', methods=['POST'])
 def upload_for_detect():
     if request.method == 'POST':
-        print 'inside func'
+        print 'inside upload view'
         file = request.files['image']
         filename = secure_filename(file.filename)
         file_save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename) 
         file.save(file_save_path)
+        print 'got file'
         cascade_file_path = os.path.join(app.root_path, 'deps/opencv/haarcascade_frontalface_default.xml')
         faces = find_faces(file_save_path, cascade_file_path)
+        print 'returned from find_faces'
         if not faces:
             face = False
         else:

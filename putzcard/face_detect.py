@@ -1,7 +1,9 @@
 from putzcard.bin_load import open_cv_available
 
 def find_faces(img_path, cascade_file_path):
+    print 'find_faces called'
     assert open_cv_available(), 'missing opencv'
+    print 'got opencv'
     from cv2 import cv as cv
     image = cv.LoadImage(img_path)
     grayscale = cv.CreateImage((image.width, image.height), 8, 1)

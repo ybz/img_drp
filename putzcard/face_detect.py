@@ -14,6 +14,6 @@ def find_faces(img_path, cascade_file_path):
     cv.EqualizeHist(grayscale, grayscale)
 
     cascade = cv.Load(cascade_file_path)
-    faces = cv.HaarDetectObjects(image, cascade, cv.CreateMemStorage(), min_size=(30, 30))
-    return faces
+    faces = cv.HaarDetectObjects(image, cascade, cv.CreateMemStorage(), scale_factor=1.08, min_neighbors = 5, min_size=(50, 50))
+    return {'width':image.width, 'height':image.height}, faces
 

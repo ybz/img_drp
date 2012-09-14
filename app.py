@@ -18,7 +18,7 @@ def index():
 
 @app.route('/putzcard_maker/')
 def drop_test():
-    return render_template('drop_test.tmpl')
+    return render_template('putzcard_maker.tmpl')
 
 @app.route('/face_upload', methods=['POST'])
 def upload_for_detect():
@@ -28,13 +28,13 @@ def upload_for_detect():
         file_save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename) 
         file.save(file_save_path)
         cascade_file_path = os.path.join(app.root_path, 'deps/opencv/haarcascade_frontalface_default.xml')
-        faces = find_faces(file_save_path, cascade_file_path)
+        image, faces = find_faces(file_save_path, cascade_file_path)
         if not faces:
             face = False
         else:
             face = {}
             face['x'], face['y'], face['height'], face['width'] = faces[0][0]
-        return jsonify({'face' : face})
+        return jsonify({'image' : image, 'face' : face})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

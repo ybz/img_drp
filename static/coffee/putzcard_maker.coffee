@@ -60,13 +60,22 @@ window.putz.drop = ns =
         res_data = arguments[0]
         console.log res_data
         if res_data.face
+            face = res_data.face
+            target_width = 60
+            target_height = 100
+            target_x_offset = 180
+            target_y_offset = 85
+            img_scale_factor = ((target_width / face.width) + (target_height / face.height)) / 2
+            img_width = Math.floor(res_data.image.width * img_scale_factor)
+            face_x_offset = Math.floor(target_x_offset - (face.x * img_scale_factor)) - 10
+            face_y_offset = Math.floor(target_y_offset - (face.y * img_scale_factor)) + 5
             $('.drop_ground').remove()
             $('body').prepend("""
                 <div class="putzcard_wrapper">
                     <div class="putzcard stage">
                         <div class="img_wrapper">
                             <img src=""/>
-                            <div class="face_mark"></div>
+                            <div class="img_overlay"></div>
                         </div>
                     </div>
                 </div>
@@ -76,16 +85,14 @@ window.putz.drop = ns =
             img_el = $('.putzcard img')
             reader.onload = ->
                 img_el.attr 'src', reader.result
+                img_el.css
+                    width : img_width + "px"
+                    height : 'auto'
+                    left : face_x_offset
+                    top : face_y_offset
             reader.readAsDataURL(img_file)
             console.log 'img loaded'
             face = res_data.face
-            mark = $('.putzcard .face_mark')
-            mark.css
-                display : 'block'
-                left : face.x
-                top : face.y
-                width : face.width
-                height : face.height
         else
             $('.drop_ground .content').html 'Sorry, no face detected in image'
 

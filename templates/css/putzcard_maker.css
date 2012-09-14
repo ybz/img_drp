@@ -22,15 +22,16 @@ body {
 }
 .putzcard .img_wrapper {
     position : relative;
+    overflow : hidden;
 }
-.putzcard .face_mark {
-    display : none;
-    background-color : #f90;
-    border-width : 2px;
-    border-style : solid;
-    border-color : rgba(100, 100, 100, 0.7);
-    opacity : 0.6;
+.putzcard img {
     position : absolute;
+}
+.putzcard .img_overlay {
+    background-image : url("{{ 'putzcard/putzcard_cover2.png' | static }}");
+    width : 750px;
+    height : 418px;
+    position : relative;
 }
 .drop_ground {
     width : 400px;
@@ -46,7 +47,13 @@ body {
     height : 100%;
 }
 .drop_ground .content {
-    color : #555;
+    color : #666;
     font-size : 26px;
     font-family : 'Bitter', serif;
+    white-space : normal;
+    width : 80%;
+}
+.drop_ground .subtitle {
+    color : #888;
+    font-size : 20px;
 }

@@ -83,30 +83,37 @@
       return ns.events('face_ajax_sent').publish();
     },
     parseFaceDetectResponse: function() {
-      var face, img_el, img_file, mark, reader, res_data;
+      var face, face_x_offset, face_y_offset, img_el, img_file, img_scale_factor, img_width, reader, res_data, target_height, target_width, target_x_offset, target_y_offset;
       console.log('returned from post, arguments ', arguments);
       res_data = arguments[0];
       console.log(res_data);
       if (res_data.face) {
+        face = res_data.face;
+        target_width = 60;
+        target_height = 100;
+        target_x_offset = 180;
+        target_y_offset = 85;
+        img_scale_factor = ((target_width / face.width) + (target_height / face.height)) / 2;
+        img_width = Math.floor(res_data.image.width * img_scale_factor);
+        face_x_offset = Math.floor(target_x_offset - (face.x * img_scale_factor)) - 10;
+        face_y_offset = Math.floor(target_y_offset - (face.y * img_scale_factor)) + 5;
         $('.drop_ground').remove();
-        $('body').prepend("<div class=\"putzcard_wrapper\">\n    <div class=\"putzcard stage\">\n        <div class=\"img_wrapper\">\n            <img src=\"\"/>\n            <div class=\"face_mark\"></div>\n        </div>\n    </div>\n</div>");
+        $('body').prepend("<div class=\"putzcard_wrapper\">\n    <div class=\"putzcard stage\">\n        <div class=\"img_wrapper\">\n            <img src=\"\"/>\n            <div class=\"img_overlay\"></div>\n        </div>\n    </div>\n</div>");
         reader = new FileReader();
         img_file = ns.face_image;
         img_el = $('.putzcard img');
         reader.onload = function() {
-          return img_el.attr('src', reader.result);
+          img_el.attr('src', reader.result);
+          return img_el.css({
+            width: img_width + "px",
+            height: 'auto',
+            left: face_x_offset,
+            top: face_y_offset
+          });
         };
         reader.readAsDataURL(img_file);
         console.log('img loaded');
-        face = res_data.face;
-        mark = $('.putzcard .face_mark');
-        return mark.css({
-          display: 'block',
-          left: face.x,
-          top: face.y,
-          width: face.width,
-          height: face.height
-        });
+        return face = res_data.face;
       } else {
         return $('.drop_ground .content').html('Sorry, no face detected in image');
       }
